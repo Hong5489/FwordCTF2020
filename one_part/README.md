@@ -35,14 +35,13 @@ After some research on Google, found a [page](https://crypto.stackexchange.com/q
 
 We can calculate this in python easily:
 ```python
-import gmpy2
-p = gmpy2.gcd(n,pow(2,(e*dp),n)-2)
+p = GCD(n,pow(2,(e*dp),n)-2)
 ```
 After we found `p`, we can simpily divide it with `n` and get `q`
 
 Then we can calculate the private key `d`:
 ```py
-p = gmpy2.gcd(n,pow(2,(e*dp),n)-2)
+p = GCD(n,pow(2,(e*dp),n)-2)
 q = n // p
 assert(n == p*q)
 phi = (p-1)*(q-1)
