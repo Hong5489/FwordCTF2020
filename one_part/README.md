@@ -31,7 +31,7 @@ According to [Wikipedia](https://en.wikipedia.org/wiki/RSA_(cryptosystem)), dp i
 
 After some research on Google, found a [page](https://crypto.stackexchange.com/questions/46486/rsa-given-n-e-dp-is-it-possible-to-find-d) that stated we can recover the private key:
 
-![formula](https://render.githubusercontent.com/render/math?math="gcd(n,r^{e.dp} - r mod n)")
+![formula](https://render.githubusercontent.com/render/math?math="gcd(n,r^{e.dp}%20-%20r%20mod%20n)")
 
 We can calculate this in python easily:
 ```python
