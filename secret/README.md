@@ -57,3 +57,8 @@ for i in range(1337):
 p.sendline(ans)
 p.interactive()
 ```
+
+## Flag
+```
+FwordCTF{it_s_all_about_the_math}
+```
