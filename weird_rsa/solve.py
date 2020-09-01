@@ -9,6 +9,5 @@ for i,text in enumerate(freq):
 		mapping[text] = englishLetterFreq[i]
 	
 for c in ciphertext:
-	if c not in mapping.keys():
-		print(" ",end='')
-	else: print(mapping[c],end='')
+	if c in mapping.keys():
+		print(mapping[c],end='')
