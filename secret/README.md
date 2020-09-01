@@ -21,9 +21,11 @@ START:
 Basically we can request addition of two different numbers, and need to answer all 1337 numbers.
 
 This can easily solve by maths:
+
 ![maths1](maths1.gif)
 
 Once we get the first number `A0` then we can calculate the second and third one:
+
 ![maths2](maths2.gif)
 
 Once we found all, we can continue to calculate the rest by requesting `0 3`, `0 4` etc and substracting with the first number, until 1337
