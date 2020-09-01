@@ -1,0 +1,72 @@
+# Weird RSA (Crypto)
+```
+I wanted to encrypt my file using RSA. Since I don't know how to properly used, I didn't print my private key nor my public exponent :(! Can you still recover my original plaintext please?
+
+Note: Wrap the flag in FwordCTF{}
+
+Author: KOOLI
+```
+Challenge files:
+[encrypted](encrypted), [encrypt.py](encrypt.py)
+
+Inside `encrypt.py`
+```py
+from random import randrange
+from Crypto.Util.number import getStrongPrime
+
+p = getStrongPrime(512)
+q = getStrongPrime(512)
+n = p * q
+e = randrange(2**16,2**1024)
+
+plain = open('plaintext','r').read().lower()
+arr = []
+for i in plain:
+	arr.append(pow(ord(i),e,n))
+open('encrypted','w').write(str(n)+"\n"+str(arr))
+```
+It used RSA encryption to encrypt some plaintext **one letter by one letter**
+
+If we know `e` the public key then we can brute force all possible character, but `e` is not given..
+
+Notice it used the `lower` function for the plaintext, so the plaintext should be all lowercase.
+
+Checked the length of ciphertext is **923**, means it should have many sentences.
+
+Because it have many words, we can do a [**frequency analysis**](https://en.wikipedia.org/wiki/Frequency_analysis)
+
+The english letter frequency I obtain from [here](https://inventwithpython.com/hacking/chapter20.html)
+```py
+ciphertext = [98426799954726408440413472704430046636171583681987185505784002530498274862689729634675078452024406991710095366468163973397776851091330681414047510418149086917152867567493001117411434787727797027775196039905364990138613786636813287715474826332270208711826839101520818674595693268980180373604240938676580835128,...
+# Count the frequency of each ciphertext and sort them in descending order
+freq = sorted(set(ciphertext), key = ciphertext.count)[::-1]
+# English letter frequency from highest to lowest
+# Spaces must be the highest
+englishLetterFreq = ' ETAOINSHRDLCUMWFGYPBVKJXQZ'
+# Map each ciphertext with a letter
+mapping = {}
+for i,text in enumerate(freq):
+	if i < 27:
+		mapping[text] = englishLetterFreq[i]
+# Print letter map to the ciphertext
+for c in ciphertext:
+	if c not in mapping.keys():
+		print(" ",end='')
+	else: print(mapping[c],end='')
+```
+Result:
+```
+MIEXLEHUG SHSRGANA NA LAEW MOI PIESVNHY ALPATNTLTNOH UNCDEIAB TDE YEHEISR NWES NA TO MNHW TDE COCLRSI RETTEIA NH TDE UNCDEITEKT SHW TIG TO IECRSUE TDEF PG TDE UOFFOH RETTEIA NH TDE LAEW RSHYLSYEB TDE STTSUVEI LALSRRG UDEUVA AOFE COAANPNRNTNEA SHW FSVEA AOFE ALPATNTLTNOHA OM RETTEIA NH UNCDEITEKTB DE ROOVA MOI COAANPRE SCCESINHY JOIWA SHW PSAEW OH TDST FSVEA FOIE ALPATNTLTNOHAB LANHY UOFCLTEIAQ NT NA COAANPRE TO TIG S ROT OM UOFPNHSTNOHA NH IERSTNZE ADOIT TNFEB JISC TDE MRSY NH NTA MOIFST   JERRMIEXLEHUGSHSRGANAIOUVAB MOI EKSFCREQ NM NH TDE SHSRG EW UNCDEITEKT TDE FOAT COCLRSI RETTEI NA KQ OHE FSG CIEWNUT TDST K IECRSUEW E OI O  OHE OM TDE FOAT COCLRSI RETTEIA NH EHYRNAD  MIOF TDE CRSNHTEKTB NT NA LAEMLR TO ROOV MOI COCLRSI CSNIA OM RETTEIA OI EZEH TIG TO CIEWNUT AOFE MIEXLEHT ROHYEI AEXLEHUEA OM RETTEIA OI JDORE JOIWAB TDE NHTILWEI SRJSGA TINEA TO MNHW AEXLEHUEA OM RETTEIA JDNUD SIE OMTEH LAEW NH TDE AEREUTEW RSHYLSYE
+```
+The result is not accurate, but we can solve it using some substitution cipher solver like [quipqiup](https://quipqiup.com/)
+
+Result:
+```
+FREQUENCY ANALYSIS IS USED FOR BREAKING SUBSTITUTION CIPHERSZ THE GENERAL IDEA IS TO FIND THE POPULAR LETTERS IN THE CIPHERTEXT AND TRY TO REPLACE THEM BY THE COMMON LETTERS IN THE USED LANGUAGEZ THE ATTACKER USUALLY CHECKS SOME POSSIBILITIES AND MAKES SOME SUBSTITUTIONS OF LETTERS IN CIPHERTEXTZ HE LOOKS FOR POSSIBLE APPEARING WORDS AND BASED ON THAT MAKES MORE SUBSTITUTIONSZ USING COMPUTERSJ IT IS POSSIBLE TO TRY A LOT OF COMBINATIONS IN RELATIVE SHORT TIMEZ WRAP THE FLAG IN ITS FORMAT WELLFREQUENCYANALYSISROCKSZ FOR EXAMPLEJ IF IN THE ANALY ED CIPHERTEXT THE MOST POPULAR LETTER IS XJ ONE MAY PREDICT THAT X REPLACED E OR O ONE OF THE MOST POPULAR LETTERS IN ENGLISH FROM THE PLAINTEXTZ IT IS USEFUL TO LOOK FOR POPULAR PAIRS OF LETTERS OR EVEN TRY TO PREDICT SOME FREQUENT LONGER SEQUENCES OF LETTERS OR WHOLE WORDSZ THE INTRUDER ALWAYS TRIES TO FIND SEQUENCES OF LETTERS WHICH ARE OFTEN USED IN THE SELECTED LANGUAGE
+```
+That it! Found the flag just by doing frequency analysis!
+
+## Flag
+```
+FwordCTF{WELLFREQUENCYANALYSISROCKS}
+```
