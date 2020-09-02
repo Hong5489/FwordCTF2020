@@ -33,11 +33,7 @@ Given a python file, it encrypts the flag by **XORing with X[i]**
 We are given with the output, even though XOR can be reversed but we do not know the `X[i]` value so cannot reverse **unless we know the original `X` array** then we can reverse the flag.
 
 After analysing the code, it got a starting random 64bit value `x` and loop to the same function again and again:
-![formula](https://render.githubusercontent.com/render/math?math=X_{0}=f(x),)
-
-![formula](https://render.githubusercontent.com/render/math?math=X_{1}=f(f(x)),)
-
-![formula](https://render.githubusercontent.com/render/math?math=X_{2}=f(f(f(x)))...)
+![maths5](maths5.gif)
 
 And then `p` is a prime, `a` and `b` is a random number, we do not know all of the unknowns
 
@@ -56,9 +52,9 @@ After some research, I found an [awesome website](https://tailcall.net/blog/crac
 ## Cracking
 First of all, we need to calculate `p` first
 
-We know that when ![formula](https://render.githubusercontent.com/render/math?math=x\equiv0\modp) (when x divide p remainder is 0)
+We know that when ![maths6.gif](maths6.gif) (when x divide p remainder is 0)
 
-Then it means ![formula](https://render.githubusercontent.com/render/math?math=x=kp) 
+Then it means `x = kp`
 
 For example, 6/3 = 2 remainder 0, x = 6, k = 2, p = 3 
 
@@ -69,9 +65,11 @@ So we need to calculate two number that remainder when divide p is 0
 We can do some substration and multiplication on the output
 
 Assume differences of `X`s is `d`:
+
 ![maths1](maths1.gif)
 
 Then we can do some trick to get 0 mod p:
+
 ![maths2](maths2.gif)
 
 Before the calculation we need to XOR the `X` array to original `X` first
@@ -101,6 +99,7 @@ Result:
 Yay! We found to value p!!
 
 Next step is to find find value a, we also can calculate it:
+
 ![maths3](maths3.gif)
 
 In modular arithmetic, we cannot directly divide values
@@ -112,6 +111,7 @@ print a
 # 7762244320486225184
 ```
 Lastly, finding value b is easy:
+
 ![maths4](maths4.gif)
 
 Substitute the values in to calculate:
