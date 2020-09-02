@@ -33,6 +33,7 @@ Given a python file, it encrypts the flag by **XORing with X[i]**
 We are given with the output, even though XOR can be reversed but we do not know the `X[i]` value so cannot reverse **unless we know the original `X` array** then we can reverse the flag.
 
 After analysing the code, it got a starting random 64bit value `x` and loop to the same function again and again:
+
 ![maths5](maths5.gif)
 
 And then `p` is a prime, `a` and `b` is a random number, we do not know all of the unknowns
